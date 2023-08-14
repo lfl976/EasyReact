@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h2>JSX</h2>
+    <code style="white-space: pre"></code>
+    <h2>createElement 返回的对象</h2>
+    <pre></pre>
+    <script>
+      const html = `
+      const element = (
+        <div id="foo">
+          <a>bar</a>
+          <b />
+        </div>
+      )
+      `;
+      document.querySelector("code").innerText = html;
+
+      function createElement(type, props, ...children) {
+        return {
+          type,
+          props: {
+            ...props,
+            children: children.map((child) =>
+              typeof child === "object" ? child : createTextElement(child)
+            ),
+          },
+        };
+      }
+
+      function createTextElement(text) {
+        return {
+          type: "TEXT_ELEMENT",
+          props: {
+            nodeValue: text,
+            children: [],
+          },
+        };
+      }
+      const Didact = {
+        createElement,
+      };
+
+      const element = Didact.createElement(
+        "div",
+        {
+          id: "foo",
+        },
+        Didact.createElement("a", null, "bar"),
+        Didact.createElement("b", null)
+      );
+
+      console.log(element);
+
+      document.querySelector("pre").innerHTML = JSON.stringify(
+        element,
+        null,
+        2
+      );
+    </script>
+  </body>
+</html>
